@@ -4,38 +4,41 @@ import {AppColors} from "../../styles/colors";
 import AppText from "../texts/AppText";
 import {AppFonts} from "../../styles/fonts";
 import {Ionicons} from "@expo/vector-icons";
-
-export default function ProductCard() {
+import {commonStyles} from "../../styles/sharedStyles";
+import {FC} from "react";
+interface IProductCard{
+    onAddToCardPress:()=>void;
+    title:string;
+    price:number;
+    imageUrl:string;
+}
+const ProductCard : FC<IProductCard> = ({onAddToCardPress,imageUrl,title,price})=> {
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.addToCardButton}>
+            <TouchableOpacity style={styles.addToCardButton} onPress={onAddToCardPress}>
                 <Ionicons name="cart" size={20} color="#FFFFFF" />
             </TouchableOpacity>
             <View style={styles.imageContainer}>
-                <Image style={styles.image} source={{uri: "https://images.unsplash.com/photo-1546054454-aa26e2b734c7?w=600"}} />
+                <Image style={styles.image} source={{uri: imageUrl}} />
             </View>
 
             <View style={styles.detailsContainer}>
-                <AppText style={styles.titleText}>iPhone 15</AppText>
-                <AppText style={styles.priceText}>1200$</AppText>
+                <AppText style={styles.titleText}>{title}</AppText>
+                <AppText style={styles.priceText}>{price}</AppText>
             </View>
         </View>
     )
 }
 
+export default ProductCard;
+
 const styles = StyleSheet.create({
     container: {
         width: s(160),
-        // height: s(160), // ❌ წაშალე ეს ხაზი
         backgroundColor: AppColors.white,
         borderRadius: s(10),
         overflow: "hidden",
-        // დაამატე shadow (სურვილისამებრ)
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
+        ...commonStyles.shadow
     },
     imageContainer: {
         overflow: "hidden",
