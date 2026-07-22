@@ -1,40 +1,61 @@
-import {StyleSheet, View, Image, TouchableOpacity} from "react-native";
+import {StyleSheet, View, Image, TouchableOpacity, Pressable} from "react-native";
 import {s, vs} from "react-native-size-matters";
 import AppText from "../texts/AppText";
 import {AppColors} from "../../styles/colors";
 import {AppFonts} from "../../styles/fonts";
-import {AntDesign} from "@expo/vector-icons";
+import {AntDesign, FontAwesome} from "@expo/vector-icons";
 
-const tempItem = {
-    price: 343,
-    title: "Apple iPhone 15 Pro",
-    imageUrl: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600",
-    id: "1"
+interface ICartItem {
+    title: string;
+    price: number;
+    imageURL: string;
+    qty: number;
+    onDeletePress: () => void;
+    onIncreasePress: () => void;
+    onReducePress: () => void;
 }
 
-const CartItem = () => {
+const CartItem = ({
+                      title,
+                      price,
+                      imageURL,
+                      qty,
+                      onDeletePress,
+                      onIncreasePress,
+                      onReducePress
+                  }: ICartItem) => {
     return (
         <View style={styles.container}>
 
             <View style={styles.imageContainer}>
-                <Image source={{uri: tempItem.imageUrl}} style={styles.image} />
+                <Image source={{uri: imageURL}} style={styles.image}/>
             </View>
 
-            {/* დეტალები */}
+
             <View style={styles.detailsContainer}>
                 <AppText style={styles.textTitle} numberOfLines={1}>
-                    {tempItem.title}
+                    {title}
                 </AppText>
                 <AppText style={styles.textPrice}>
-                    ${tempItem.price}
+                    {price}$
                 </AppText>
             </View>
 
 
-            <TouchableOpacity style={styles.deleteButton}>
-                <AntDesign name="delete" size={s(18)} color={AppColors.redColor} />
+            <TouchableOpacity style={styles.deleteButton} onPress={onDeletePress}>
+                <AntDesign name="delete" size={s(18)} color={AppColors.redColor}/>
                 <AppText style={styles.deleteText}>Delete</AppText>
             </TouchableOpacity>
+
+            <View style={styles.qtyContainer}>
+                <Pressable style={styles.iconButton} onPress={onIncreasePress}>
+                    <FontAwesome name="plus" size={s(10)} color={AppColors.primary}/>
+                </Pressable>
+                <AppText style={styles.textQty}>{qty}</AppText>
+                <Pressable style={styles.iconButton} onPress={onReducePress}>
+                    <FontAwesome name="minus" size={s(10)} color={AppColors.primary}/>
+                </Pressable>
+            </View>
         </View>
     );
 };
@@ -54,7 +75,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: AppColors.borderColor,
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.05,
         shadowRadius: 4,
         elevation: 2,
@@ -98,4 +119,34 @@ const styles = StyleSheet.create({
         color: AppColors.medGray,
         fontSize: s(12),
     },
+
+    qtyContainer: {
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+        paddingHorizontal: s(5),
+        borderRadius: s(30),
+        borderWidth: s(1),
+        borderColor: AppColors.blueGrey,
+        width: s(80),
+        paddingVertical: s(5),
+
+    },
+
+    iconButton: {
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: AppColors.lightGrey,
+        padding:s(5),
+        height:s(20),
+        width:s(20),
+        borderRadius: s(10),
+    },
+    textQty:{
+        flex:1,
+        textAlign:"center",
+        color:AppColors.primary,
+        fontFamily: AppFonts.Bold,
+        fontSize: s(14),
+    }
 });
