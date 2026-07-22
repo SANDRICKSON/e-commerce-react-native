@@ -3,11 +3,13 @@ import HomeHeader from "../../components/headers/HomeHeader";
 import EmptyCart from "./EmptyCart";
 import {AppColors} from "../../styles/colors";
 import {StyleSheet} from "react-native";
+import CartItem from "../../components/cart/CartItem";
 export default function CartScreen() {
     return (
         <View style={styles.container}>
             <HomeHeader/>
-            <EmptyCart/>
+            {/*<EmptyCart/>*/}
+            <CartItem/>
         </View>
     )
 }
