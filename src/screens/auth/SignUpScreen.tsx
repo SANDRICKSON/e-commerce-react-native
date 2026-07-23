@@ -1,4 +1,4 @@
-import {View, StyleSheet, Image} from "react-native";
+import {View, StyleSheet, Image, Alert} from "react-native";
 import {sharedPaddingHorizontal} from "../../styles/sharedStyles";
 import AppSafeView from "../../components/views/AppSafeView";
 import {Images} from "../../constants/images-paths";
@@ -12,6 +12,7 @@ import {useNavigation} from "@react-navigation/native";
 import {useForm, Controller} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {signUpSchema, SignUpFormData} from "../../schemas/authSchemas";
+import {auth, createUserWithEmailAndPassword} from "../../config/firebase";
 
 const SignUpScreen = () => {
     const navigation = useNavigation();
@@ -34,11 +35,21 @@ const SignUpScreen = () => {
 
     const onSubmit = async (data: SignUpFormData) => {
         try {
-            // აქ დაამატეთ თქვენი რეგისტრაციის ლოგიკა
-            console.log('Sign Up Data:', data);
-            // navigation.navigate("MainApp" as never);
-        } catch (error) {
+            const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+            console.log('Sign Up Success:', userCredential.user.email);
+            // @ts-ignore - navigate to MainApp
+            navigation.navigate("MainApp");
+        } catch (error: any) {
             console.error('Sign up error:', error);
+            let errorMessage = 'Failed to create account. Please try again.';
+            if (error.code === 'auth/email-already-in-use') {
+                errorMessage = 'This email is already registered. Please sign in instead.';
+            } else if (error.code === 'auth/invalid-email') {
+                errorMessage = 'Invalid email address.';
+            } else if (error.code === 'auth/weak-password') {
+                errorMessage = 'Password is too weak. Please choose a stronger password.';
+            }
+            Alert.alert('Registration Failed', errorMessage);
         }
     };
 
