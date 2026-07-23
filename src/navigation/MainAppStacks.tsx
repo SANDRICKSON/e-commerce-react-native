@@ -3,6 +3,7 @@ import SignUpScreen from "../screens/auth/SignUpScreen";
 import SignInScreen from "../screens/auth/SignInScreen";
 import MainAppBottomTabs from "./MainAppBottomTabs";
 import CheckoutScreen from "../screens/cart/CheckoutScreen";
+import MyOrderScreen from "../screens/profile/MyOrdersScreen";
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,7 @@ export default function MainAppStacks() {
 
             <Stack.Screen name="MainApp" component={MainAppBottomTabs}/>
             <Stack.Screen name="CheckoutScreen" component={CheckoutScreen} options={{ headerShown: true }} />
+            <Stack.Screen name="MyOrdersScreen" component={MyOrderScreen} options={{ headerShown: true, title: "My Orders" }}/>
         </Stack.Navigator>
     );
 }
