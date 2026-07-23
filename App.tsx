@@ -2,6 +2,8 @@ import {ActivityIndicator, StyleSheet} from 'react-native';
 import {NavigationContainer} from "@react-navigation/native";
 import MainAppStacks from "./src/navigation/MainAppStacks";
 import {useFonts} from "expo-font";
+import {Provider} from "react-redux";
+import {store} from "./src/store/store";
 
 export default function App() {
     const fontsLoaded = useFonts({
@@ -14,10 +16,11 @@ export default function App() {
     }
     return (
 
-        <NavigationContainer>
-            <MainAppStacks/>
-
-        </NavigationContainer>
+        <Provider store={store}>
+            <NavigationContainer>
+                <MainAppStacks/>
+            </NavigationContainer>
+        </Provider>
     );
 }
 
