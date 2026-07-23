@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Image} from "react-native";
+import {View, StyleSheet, Image, TouchableOpacity} from "react-native";
 import {sharedPaddingHorizontal} from "../../styles/sharedStyles";
 import AppSafeView from "../../components/views/AppSafeView";
 import {Images} from "../../constants/images-paths";
@@ -9,58 +9,154 @@ import AppText from "../../components/texts/AppText";
 import AppButton from "../../components/buttons/AppButton";
 import {AppColors} from "../../styles/colors";
 import {useNavigation} from "@react-navigation/native";
+import {useForm, Controller} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
+import {signInSchema, SignInFormData} from "../../schemas/authSchemas";
 
 const SignInScreen = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const navigation = useNavigation();
+    const [showPassword, setShowPassword] = useState(false);
+
+    const {
+        control,
+        handleSubmit,
+        formState: {errors, isSubmitting},
+    } = useForm<SignInFormData>({
+        resolver: yupResolver(signInSchema),
+        defaultValues: {
+            email: '',
+            password: '',
+        },
+    });
+
+    const onSubmit = async (data: SignInFormData) => {
+        try {
+            // აქ დაამატეთ თქვენი ავტორიზაციის ლოგიკა
+            console.log('Sign In Data:', data);
+            // navigation.navigate("MainApp" as never);
+        } catch (error) {
+            console.error('Sign in error:', error);
+        }
+    };
+
     return (
         <AppSafeView style={styles.container}>
-            <Image source={Images.appLogo} style={styles.logo}></Image>
+            <Image source={Images.appLogo} style={styles.logo} />
 
-            <AppTextInput placeholder="Email" onChangeText={setEmail} value={email}></AppTextInput>
-            <AppTextInput placeholder="Password" onChangeText={setPassword} secureTextEntry={true}
-                          value={password}></AppTextInput>
-            <AppText style={styles.appName}>Smart E-Commerce App</AppText>
+            <Controller
+                control={control}
+                name="email"
+                render={({field: {onChange, onBlur, value}}) => (
+                    <AppTextInput
+                        placeholder="Email"
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        value={value}
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                    />
+                )}
+            />
+            {errors.email && (
+                <AppText style={styles.errorText}>{errors.email.message}</AppText>
+            )}
+
+            <Controller
+                control={control}
+                name="password"
+                render={({field: {onChange, onBlur, value}}) => (
+                    <AppTextInput
+                        placeholder="Password"
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        value={value}
+                        secureTextEntry={!showPassword}
+                    />
+                )}
+            />
+            {errors.password && (
+                <AppText style={styles.errorText}>{errors.password.message}</AppText>
+            )}
+
+            <TouchableOpacity
+                style={styles.forgotPassword}
+                onPress={() => console.log('Forgot password')}
+            >
+                <AppText style={styles.forgotPasswordText}>Forgot Password?</AppText>
+            </TouchableOpacity>
+
             <AppButton
-                onPress={() => navigation.navigate("MainApp")}
+                onPress={handleSubmit(onSubmit)}
                 title="Sign In"
+                disabled={isSubmitting}
             />
 
+            <View style={styles.divider}>
+                <View style={styles.dividerLine} />
+                <AppText style={styles.dividerText}>or</AppText>
+                <View style={styles.dividerLine} />
+            </View>
+
             <AppButton
-                onPress={() => navigation.navigate("SignUp")}
-                title="Sign Up"
+                onPress={() => navigation.navigate("SignUp" as never)}
+                title="Create New Account"
                 style={styles.registerButton}
                 textColor={AppColors.primary}
             />
         </AppSafeView>
-    )
-}
+    );
+};
 
-export default SignInScreen
-
+export default SignInScreen;
 
 const styles = StyleSheet.create({
     container: {
         alignItems: "center",
-        paddingHorizontal: sharedPaddingHorizontal
+        paddingHorizontal: sharedPaddingHorizontal,
+        paddingTop: vs(20),
     },
-
     logo: {
-        height: s(250),
-        width: s(500),
-        marginBottom: vs(30)
+        height: s(200),
+        width: s(400),
+        marginBottom: vs(30),
+        resizeMode: 'contain',
     },
-    appName: {
-        fontSize: s(16),
-        marginBottom: vs(15),
-        fontWeight: "bold",
+    errorText: {
+        fontSize: s(12),
+        color: AppColors.redColor,
+        alignSelf: 'flex-start',
+        marginBottom: vs(4),
+        marginLeft: s(8),
+    },
+    forgotPassword: {
+        alignSelf: 'flex-end',
+        marginBottom: vs(16),
+        marginTop: vs(4),
+    },
+    forgotPasswordText: {
+        fontSize: s(14),
+        color: AppColors.primary,
     },
     registerButton: {
         backgroundColor: AppColors.white,
         borderWidth: 1,
-        marginTop: vs(15),
+        marginTop: vs(8),
         borderColor: AppColors.primary,
-
-    }
-})
+    },
+    divider: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: vs(16),
+        width: '100%',
+    },
+    dividerLine: {
+        flex: 1,
+        height: 1,
+        backgroundColor: AppColors.borderColor,
+    },
+    dividerText: {
+        fontSize: s(14),
+        color: AppColors.medGray,
+        paddingHorizontal: s(16),
+    },
+});

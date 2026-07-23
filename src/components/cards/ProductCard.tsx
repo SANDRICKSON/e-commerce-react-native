@@ -6,13 +6,15 @@ import {AppFonts} from "../../styles/fonts";
 import {Ionicons} from "@expo/vector-icons";
 import {commonStyles} from "../../styles/sharedStyles";
 import {FC} from "react";
-interface IProductCard{
-    onAddToCardPress:()=>void;
-    title:string;
-    price:number;
-    imageUrl:string;
+
+interface IProductCard {
+    onAddToCardPress: () => void;
+    title: string;
+    price: number;
+    imageUrl: string;
 }
-const ProductCard : FC<IProductCard> = ({onAddToCardPress,imageUrl,title,price})=> {
+
+const ProductCard: FC<IProductCard> = ({onAddToCardPress, imageUrl, title, price}) => {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.addToCardButton} onPress={onAddToCardPress}>
@@ -23,12 +25,12 @@ const ProductCard : FC<IProductCard> = ({onAddToCardPress,imageUrl,title,price})
             </View>
 
             <View style={styles.detailsContainer}>
-                <AppText style={styles.titleText}>{title}</AppText>
-                <AppText style={styles.priceText}>{price}</AppText>
+                <AppText style={styles.titleText} numberOfLines={1}>{title}</AppText>
+                <AppText style={styles.priceText}>${price}</AppText>
             </View>
         </View>
-    )
-}
+    );
+};
 
 export default ProductCard;
 
@@ -38,7 +40,8 @@ const styles = StyleSheet.create({
         backgroundColor: AppColors.white,
         borderRadius: s(10),
         overflow: "hidden",
-        ...commonStyles.shadow
+        ...commonStyles.shadow,
+        marginBottom: vs(10),
     },
     imageContainer: {
         overflow: "hidden",
@@ -50,26 +53,25 @@ const styles = StyleSheet.create({
     image: {
         width: "100%",
         height: "100%",
-        resizeMode: "cover", // "contain" → "cover" (უკეთესია ბარათებისთვის)
+        resizeMode: "cover",
     },
     detailsContainer: {
         paddingTop: s(8),
         paddingBottom: vs(12),
         paddingHorizontal: s(10),
-        // flex:1 აღარ არის საჭირო
     },
     titleText: {
         fontSize: s(14),
         fontFamily: AppFonts.Bold,
-        color: AppColors.black, // შავი უკეთ ჩანს
+        color: AppColors.black,
         marginBottom: vs(2),
     },
     priceText: {
         fontSize: s(14),
         fontFamily: AppFonts.Medium,
-        color: AppColors.primary, // ან AppColors.black
+        color: AppColors.primary,
     },
-    addToCardButton:{
+    addToCardButton: {
         height: s(28),
         width: s(28),
         position: "absolute",
@@ -81,5 +83,4 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     }
-
 });

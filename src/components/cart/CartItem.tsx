@@ -6,6 +6,7 @@ import {AppFonts} from "../../styles/fonts";
 import {AntDesign, FontAwesome} from "@expo/vector-icons";
 
 interface ICartItem {
+    id: string; // დამატებულია id
     title: string;
     price: number;
     imageURL: string;
@@ -16,6 +17,7 @@ interface ICartItem {
 }
 
 const CartItem = ({
+                      id,
                       title,
                       price,
                       imageURL,
@@ -26,11 +28,9 @@ const CartItem = ({
                   }: ICartItem) => {
     return (
         <View style={styles.container}>
-
             <View style={styles.imageContainer}>
                 <Image source={{uri: imageURL}} style={styles.image}/>
             </View>
-
 
             <View style={styles.detailsContainer}>
                 <AppText style={styles.textTitle} numberOfLines={1}>
@@ -40,7 +40,6 @@ const CartItem = ({
                     {price}$
                 </AppText>
             </View>
-
 
             <TouchableOpacity style={styles.deleteButton} onPress={onDeletePress}>
                 <AntDesign name="delete" size={s(18)} color={AppColors.redColor}/>
@@ -119,7 +118,6 @@ const styles = StyleSheet.create({
         color: AppColors.medGray,
         fontSize: s(12),
     },
-
     qtyContainer: {
         justifyContent: "center",
         alignItems: "center",
@@ -130,22 +128,20 @@ const styles = StyleSheet.create({
         borderColor: AppColors.blueGrey,
         width: s(80),
         paddingVertical: s(5),
-
     },
-
     iconButton: {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: AppColors.lightGrey,
-        padding:s(5),
-        height:s(20),
-        width:s(20),
+        padding: s(5),
+        height: s(20),
+        width: s(20),
         borderRadius: s(10),
     },
-    textQty:{
-        flex:1,
-        textAlign:"center",
-        color:AppColors.primary,
+    textQty: {
+        flex: 1,
+        textAlign: "center",
+        color: AppColors.primary,
         fontFamily: AppFonts.Bold,
         fontSize: s(14),
     }
