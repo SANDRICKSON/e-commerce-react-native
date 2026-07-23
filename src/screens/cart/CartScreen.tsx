@@ -6,7 +6,10 @@ import {StyleSheet} from "react-native";
 import CartItem from "../../components/cart/CartItem";
 import TotalViews from "../../components/cart/TotalViews";
 import {products} from "../../data/products";
+import AppButton from "../../components/buttons/AppButton";
+import {useNavigation} from "@react-navigation/native";
 export default function CartScreen() {
+    const navigation = useNavigation();
     return (
         <View style={styles.container}>
             <HomeHeader/>
@@ -18,6 +21,7 @@ export default function CartScreen() {
             />
             <CartItem/>
             <TotalViews/>
+            <AppButton onPress={()=>navigation.navigate("CheckoutScreen")} title='Continue'/>
         </View>
     )
 }
